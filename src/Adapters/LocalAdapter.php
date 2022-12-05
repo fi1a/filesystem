@@ -35,23 +35,24 @@ class LocalAdapter implements FilesystemAdapterInterface
     private $rights;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $directory;
 
     /**
      * Конструктор
      */
-    public function __construct(?string $directory = null, int $rights = 0775)
+    public function __construct(string $directory, int $rights = 0775)
     {
-        if ($directory) {
-            $this->directory = realpath($directory);
-            if (!$this->directory) {
-                throw new InvalidArgumentException(sprintf('Папка "%s" не существует.', $directory));
-            }
-            if ($this->directory !== '/') {
-                $this->directory = rtrim($this->directory, '/\\');
-            }
+        if (!$directory) {
+            throw new InvalidArgumentException(sprintf('Путь не может быть пустой'));
+        }
+        $this->directory = realpath($directory);
+        if (!$this->directory) {
+            throw new InvalidArgumentException(sprintf('Путь "%s" не существует', $directory));
+        }
+        if ($this->directory !== '/') {
+            $this->directory = rtrim($this->directory, '/\\');
         }
 
         $this->rights = $rights;
@@ -369,17 +370,13 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     private function normalizePath(string $path): string
     {
-        if (!LocalUtil::isAbsolutePath($path) && $this->directory) {
+        if (!LocalUtil::isAbsolutePath($path)) {
             $path = $this->directory . DIRECTORY_SEPARATOR . $path;
         }
 
         $path = is_file($path) || is_dir($path) || is_link($path) ? realpath($path) : $path;
 
-        if (!$path) {
-            throw new InvalidArgumentException('Путь не может быть пустым');
-        }
-
-        if ($this->directory && mb_strpos($path, $this->directory) !== 0) {
+        if (mb_strpos($path, $this->directory) !== 0) {
             throw new OutOfBoundsException(
                 sprintf('Путь "%s" выходит за рамки определенного в адаптере.', $path)
             );
