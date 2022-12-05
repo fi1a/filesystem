@@ -7,7 +7,7 @@ namespace Fi1a\Filesystem;
 use Fi1a\Collection\AbstractInstanceCollection;
 
 /**
- * Коллекция
+ * Коллекция файлов и папок
  */
 class NodeCollection extends AbstractInstanceCollection implements NodeCollectionInterface
 {
