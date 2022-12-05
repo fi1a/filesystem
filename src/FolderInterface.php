@@ -10,23 +10,23 @@ namespace Fi1a\Filesystem;
 interface FolderInterface extends NodeInterface
 {
     /**
-     * Возвращает массив из дочерних элементов
+     * Возвращает коллекцию из дочерних элементов
      *
-     * @return CollectionInterface|false
+     * @return NodeCollectionInterface|false
      */
     public function all();
 
     /**
-     * Возвращает массив из дочерних файлов
+     * Возвращает коллекцию из дочерних файлов
      *
-     * @return CollectionInterface|false
+     * @return NodeCollectionInterface|false
      */
-    public function getFiles();
+    public function allFiles();
 
     /**
-     * Возвращает массив из дочерних папок
+     * Возвращает коллекцию из дочерних папок
      *
-     * @return CollectionInterface|false
+     * @return NodeCollectionInterface|false
      */
-    public function getFolders();
+    public function allFolders();
 }

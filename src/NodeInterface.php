@@ -12,38 +12,19 @@ interface NodeInterface
     /**
      * Конструктор
      */
-    public function __construct(string $key, FilesystemInterface $filesystem);
-
-    /**
-     * Устанавливает путь
-     *
-     * @return $this
-     */
-    public function setPath(string $path);
+    public function __construct(string $path, FilesystemInterface $filesystem);
 
     /**
      * Возвращает путь
      *
-     * @return string|false
+     * @return string
      */
     public function getPath();
-
-    /**
-     * Возвращает абсолютный путь
-     *
-     * @return string|false
-     */
-    public function getRealPath();
 
     /**
      * Проверяет существование
      */
     public function isExist(): bool;
-
-    /**
-     * Проверяет существование файла или папки
-     */
-    public function isNodeExist(): bool;
 
     /**
      * Является ли файлом
@@ -54,11 +35,6 @@ interface NodeInterface
      * Является ли папкой
      */
     public function isFolder(): bool;
-
-    /**
-     * Является ссылкой
-     */
-    public function isLink(): bool;
 
     /**
      * Возвращает размер
@@ -117,38 +93,13 @@ interface NodeInterface
 
     /**
      * Переименовывает
-     *
-     * @param string $newName новое имя
-     *
-     * @return $this|false
      */
-    public function rename(string $newName);
+    public function rename(string $newName): bool;
 
     /**
      * Перемещает
-     *
-     * @param string $path путь куда будет перемещен
-     *
-     * @return bool|static
      */
-    public function move(string $path);
-
-    /**
-     * Меняет права на файл или папку
-     */
-    public function chmod(int $rights): bool;
-
-    /**
-     * Возвращает дефолтные права на папки и файлы
-     */
-    public function getDefaultRights(): int;
-
-    /**
-     * Установить дефолтные праван на папки и файлы
-     *
-     * @return static
-     */
-    public function setDefaultRights(int $rights);
+    public function move(string $path): bool;
 
     /**
      * @return string

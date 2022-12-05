@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Filesystem;
 
-use Fi1a\Collection\IInstanceCollection;
+use Fi1a\Collection\InstanceCollectionInterface;
 
 /**
  * Коллекция
@@ -12,6 +12,6 @@ use Fi1a\Collection\IInstanceCollection;
  * @mixin FileInterface
  * @mixin FolderInterface
  */
-interface CollectionInterface extends IInstanceCollection
+interface NodeCollectionInterface extends InstanceCollectionInterface
 {
 }

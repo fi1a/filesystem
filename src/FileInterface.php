@@ -25,10 +25,8 @@ interface FileInterface extends NodeInterface
 
     /**
      * Возвращает имя без расширения
-     *
-     * @return string
      */
-    public function getBaseName();
+    public function getBaseName(): string;
 
     /**
      * Запись в файл
@@ -43,21 +41,9 @@ interface FileInterface extends NodeInterface
     public function canExecute(): bool;
 
     /**
-     * Является ли файл символической ссылкой
-     */
-    public function isLink(): bool;
-
-    /**
      * Возвращает время изменения файла
      *
      * @return int|false
      */
     public function getMTime();
-
-    /**
-     * Возвращает mime тип файла
-     *
-     * @return string|false
-     */
-    public function getMimeType();
 }
