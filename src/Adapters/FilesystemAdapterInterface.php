@@ -62,11 +62,6 @@ interface FilesystemAdapterInterface
     public function isFolder(string $path): bool;
 
     /**
-     * Является ссылкой, или нет
-     */
-    public function isLink(string $path): bool;
-
-    /**
      * Является файлом, или нет
      */
     public function isFile(string $path): bool;

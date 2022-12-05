@@ -29,7 +29,7 @@ class Filesystem implements FilesystemInterface
      */
     public function factory(string $path): NodeInterface
     {
-        if ($this->adapter->isFolder($path) && !$this->adapter->isLink($path)) {
+        if ($this->adapter->isFolder($path)) {
             return $this->factoryFolder($path);
         }
 

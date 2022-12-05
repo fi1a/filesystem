@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Fi1a\Filesystem\Adapters;
 
+use Fi1a\Filesystem\Utils\LocalUtil;
 use FilesystemIterator;
 use InvalidArgumentException;
+use OutOfBoundsException;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
@@ -32,8 +34,26 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     private $rights;
 
-    public function __construct(int $rights = 0775)
+    /**
+     * @var string|null
+     */
+    private $directory;
+
+    /**
+     * Конструктор
+     */
+    public function __construct(?string $directory = null, int $rights = 0775)
     {
+        if ($directory) {
+            $this->directory = realpath($directory);
+            if (!$this->directory) {
+                throw new InvalidArgumentException(sprintf('Папка "%s" не существует.', $directory));
+            }
+            if ($this->directory !== '/') {
+                $this->directory = rtrim($this->directory, '/\\');
+            }
+        }
+
         $this->rights = $rights;
     }
 
@@ -42,7 +62,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function getName(string $path): string
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
         $info = pathinfo($path);
 
         return $info['basename'];
@@ -53,7 +73,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function getExtension(string $path): ?string
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
         $info = pathinfo($path);
 
         return array_key_exists('extension', $info) ? $info['extension'] : null;
@@ -64,7 +84,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function getBaseName(string $path): string
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
         $info = pathinfo($path);
 
         return array_key_exists('filename', $info) ? $info['filename'] : '';
@@ -75,7 +95,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function peekParentPath(string $path)
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
         $info = pathinfo($path);
 
         return $info['dirname'] && $info['dirname'] !== $path ? $info['dirname'] : false;
@@ -86,7 +106,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function canRead(string $path): bool
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
 
         return is_readable($path);
     }
@@ -96,7 +116,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function canWrite(string $path): bool
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
 
         return is_writable($path);
     }
@@ -106,7 +126,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function canExecute(string $path): bool
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
 
         return is_executable($path);
     }
@@ -116,7 +136,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function isFolderExist(string $path): bool
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
 
         return is_dir($path);
     }
@@ -126,7 +146,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function isFileExist(string $path): bool
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
 
         return is_file($path);
     }
@@ -150,19 +170,10 @@ class LocalAdapter implements FilesystemAdapterInterface
     /**
      * @inheritDoc
      */
-    public function isLink(string $path): bool
-    {
-        $this->checkPath($path);
-
-        return is_link($path);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function makeFolder(string $path): bool
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
+
         if ($this->isFolderExist($path)) {
             return false;
         }
@@ -175,7 +186,8 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function all(string $path)
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
+
         if (!$this->isFolder($path) || !$this->canRead($path)) {
             return false;
         }
@@ -188,7 +200,8 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function allFiles(string $path)
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
+
         if (!$this->isFolder($path)) {
             return false;
         }
@@ -201,7 +214,8 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function allFolders(string $path)
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
+
         if (!$this->isFolder($path)) {
             return false;
         }
@@ -214,7 +228,8 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function filesize(string $path)
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
+
         if (!$this->isFileExist($path)) {
             return false;
         }
@@ -227,7 +242,8 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function deleteFile(string $path): bool
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
+
         if (!$this->canWrite($path)) {
             return false;
         }
@@ -240,7 +256,8 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function deleteFolder(string $path): bool
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
+
         if (!$this->canWrite($path)) {
             return false;
         }
@@ -253,7 +270,8 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function write(string $path, $content)
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
+
         if ($this->isFileExist($path) && !$this->canWrite($path)) {
             return false;
         }
@@ -268,8 +286,8 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function copyFile(string $path, string $destination): bool
     {
-        $this->checkPath($path);
-        $this->checkPath($destination);
+        $path = $this->normalizePath($path);
+        $destination = $this->normalizePath($destination);
 
         $return = @copy($path, $destination);
         if ($return) {
@@ -284,7 +302,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function readFile(string $path)
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
         if (
             !$this->isFileExist($path)
             || !$this->canRead($path)
@@ -306,7 +324,7 @@ class LocalAdapter implements FilesystemAdapterInterface
      */
     public function getMTime(string $path)
     {
-        $this->checkPath($path);
+        $path = $this->normalizePath($path);
         if (!$this->isFileExist($path)) {
             return false;
         }
@@ -347,12 +365,26 @@ class LocalAdapter implements FilesystemAdapterInterface
     }
 
     /**
-     * Выбрасывает исключение при пустом пути
+     * Возвращает путь
      */
-    private function checkPath(string $path): void
+    private function normalizePath(string $path): string
     {
+        if (!LocalUtil::isAbsolutePath($path) && $this->directory) {
+            $path = $this->directory . DIRECTORY_SEPARATOR . $path;
+        }
+
+        $path = is_file($path) || is_dir($path) || is_link($path) ? realpath($path) : $path;
+
         if (!$path) {
             throw new InvalidArgumentException('Путь не может быть пустым');
         }
+
+        if ($this->directory && mb_strpos($path, $this->directory) !== 0) {
+            throw new OutOfBoundsException(
+                sprintf('Путь "%s" выходит за рамки определенного в адаптере.', $path)
+            );
+        }
+
+        return $path;
     }
 }

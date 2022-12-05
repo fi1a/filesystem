@@ -18,16 +18,16 @@ class FilesystemTestCase extends TestCase
     /**
      * Возвращает объект файловой системы
      */
-    protected function getFilesystem(): FilesystemInterface
+    protected function getFilesystem(?string $directory = __DIR__ . '/../Resources'): FilesystemInterface
     {
-        return new Filesystem($this->getAdapter());
+        return new Filesystem($this->getAdapter($directory));
     }
 
     /**
      * Возвращает адаптер
      */
-    protected function getAdapter(): FilesystemAdapterInterface
+    protected function getAdapter(?string $directory): FilesystemAdapterInterface
     {
-        return new LocalAdapter();
+        return new LocalAdapter($directory);
     }
 }

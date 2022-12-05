@@ -42,8 +42,8 @@ class FolderTest extends FilesystemTestCase
     public function testGetName(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder('/path/to/folder');
-        $this->assertEquals('folder', $folder->getName());
+        $folder = $filesystem->factoryFolder('./not-exists');
+        $this->assertEquals('not-exists', $folder->getName());
     }
 
     /**
@@ -52,8 +52,8 @@ class FolderTest extends FilesystemTestCase
     public function testPeekParentPath(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder('/path/to/folder');
-        $this->assertEquals('/path/to', $folder->peekParentPath());
+        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
+        $this->assertEquals(__DIR__ . '/Resources', $folder->peekParentPath());
     }
 
     /**
@@ -61,7 +61,7 @@ class FolderTest extends FilesystemTestCase
      */
     public function testPeekParentPathRoot(): void
     {
-        $filesystem = $this->getFilesystem();
+        $filesystem = $this->getFilesystem(null);
         $folder = $filesystem->factoryFolder('/');
         $this->assertFalse($folder->peekParentPath());
     }
@@ -72,8 +72,8 @@ class FolderTest extends FilesystemTestCase
     public function testParent(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder('/path/to/folder');
-        $this->assertEquals('/path/to', $folder->getParent()->getPath());
+        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
+        $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
     }
 
     /**
@@ -81,7 +81,7 @@ class FolderTest extends FilesystemTestCase
      */
     public function testParentRoot(): void
     {
-        $filesystem = $this->getFilesystem();
+        $filesystem = $this->getFilesystem(null);
         $folder = $filesystem->factoryFolder('/');
         $this->assertFalse($folder->getParent());
     }
@@ -101,7 +101,7 @@ class FolderTest extends FilesystemTestCase
      */
     public function testCanWrite(): void
     {
-        $filesystem = $this->getFilesystem();
+        $filesystem = $this->getFilesystem(null);
         $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
         $this->assertTrue($folder->canWrite());
         $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder/not-exists');
@@ -139,7 +139,7 @@ class FolderTest extends FilesystemTestCase
      */
     public function testRenameRoot(): void
     {
-        $filesystem = $this->getFilesystem();
+        $filesystem = $this->getFilesystem(null);
         $folder = $filesystem->factoryFolder('/');
         $this->assertFalse($folder->rename('new-name'));
     }
@@ -184,7 +184,7 @@ class FolderTest extends FilesystemTestCase
      */
     public function testMoveRoot(): void
     {
-        $filesystem = $this->getFilesystem();
+        $filesystem = $this->getFilesystem(null);
         $folder = $filesystem->factoryFolder('/');
         $this->assertFalse($folder->move('/move-folder-fail'));
     }
