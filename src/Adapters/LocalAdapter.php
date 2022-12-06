@@ -99,7 +99,9 @@ class LocalAdapter implements FilesystemAdapterInterface
         $path = $this->normalizePath($path);
         $info = pathinfo($path);
 
-        return $info['dirname'] && $info['dirname'] !== $path ? $info['dirname'] : false;
+        return $info['dirname'] && $info['dirname'] !== $path && mb_strpos($info['dirname'], $this->directory) === 0
+            ? $info['dirname']
+            : false;
     }
 
     /**
