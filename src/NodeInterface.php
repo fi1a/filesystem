@@ -15,6 +15,11 @@ interface NodeInterface
     public function __construct(string $path, FilesystemInterface $filesystem);
 
     /**
+     * Возвращает объект файловой системы
+     */
+    public function getFilesystem(): FilesystemInterface;
+
+    /**
      * Возвращает путь
      *
      * @return string

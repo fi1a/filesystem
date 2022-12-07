@@ -59,7 +59,7 @@ abstract class Node implements NodeInterface
      */
     public function getName(): string
     {
-        return $this->filesystem->getName($this->getPath());
+        return $this->getFilesystem()->getName($this->getPath());
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class Node implements NodeInterface
             return false;
         }
 
-        return $this->filesystem->factoryFolder($path);
+        return $this->getFilesystem()->factoryFolder($path);
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class Node implements NodeInterface
      */
     public function peekParentPath()
     {
-        return $this->filesystem->peekParentPath($this->getPath());
+        return $this->getFilesystem()->peekParentPath($this->getPath());
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class Node implements NodeInterface
      */
     public function canRead(): bool
     {
-        return $this->filesystem->canRead($this->getPath());
+        return $this->getFilesystem()->canRead($this->getPath());
     }
 
     /**
@@ -97,7 +97,7 @@ abstract class Node implements NodeInterface
     public function canWrite(): bool
     {
         if ($this->isExist()) {
-            return $this->filesystem->canWrite($this->getPath());
+            return $this->getFilesystem()->canWrite($this->getPath());
         }
         $parent = $this->getParent();
 
@@ -113,7 +113,7 @@ abstract class Node implements NodeInterface
         if (!$parent || mb_strpos($newName, DIRECTORY_SEPARATOR) !== false) {
             return false;
         }
-        $node = $this->filesystem->factory($parent->getPath() . DIRECTORY_SEPARATOR . $newName);
+        $node = $this->getFilesystem()->factory($parent->getPath() . DIRECTORY_SEPARATOR . $newName);
         $result = @rename($this->getPath(), $node->getPath());
         if ($result) {
             $this->setPath($node->getPath());
@@ -130,7 +130,7 @@ abstract class Node implements NodeInterface
         if (!$this->isExist() || $this->peekParentPath() === false) {
             return false;
         }
-        $node = $this->filesystem->factory($path);
+        $node = $this->getFilesystem()->factory($path);
         $parent = $node->getParent();
         if ($node->isExist() || !$parent) {
             return false;
@@ -152,5 +152,13 @@ abstract class Node implements NodeInterface
     public function __toString()
     {
         return $this->getPath();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilesystem(): FilesystemInterface
+    {
+        return $this->filesystem;
     }
 }

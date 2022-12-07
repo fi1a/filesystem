@@ -16,7 +16,7 @@ class Folder extends Node implements FolderInterface
      */
     public function isExist(): bool
     {
-        return $this->filesystem->isFolderExist($this->getPath());
+        return $this->getFilesystem()->isFolderExist($this->getPath());
     }
 
     /**
@@ -49,7 +49,7 @@ class Folder extends Node implements FolderInterface
     public function all(): NodeCollectionInterface
     {
         $collection = new NodeCollection($this->filesystem, []);
-        $nodes = $this->filesystem->all($this->getPath());
+        $nodes = $this->getFilesystem()->all($this->getPath());
         if ($nodes === false) {
             return $collection;
         }
@@ -63,8 +63,8 @@ class Folder extends Node implements FolderInterface
      */
     public function allFiles(): NodeCollectionInterface
     {
-        $collection = new NodeCollection($this->filesystem, []);
-        $nodes = $this->filesystem->allFiles($this->getPath());
+        $collection = new NodeCollection($this->getFilesystem(), []);
+        $nodes = $this->getFilesystem()->allFiles($this->getPath());
         if ($nodes === false) {
             return $collection;
         }
@@ -78,8 +78,8 @@ class Folder extends Node implements FolderInterface
      */
     public function allFolders(): NodeCollectionInterface
     {
-        $collection = new NodeCollection($this->filesystem, []);
-        $nodes = $this->filesystem->allFolders($this->getPath());
+        $collection = new NodeCollection($this->getFilesystem(), []);
+        $nodes = $this->getFilesystem()->allFolders($this->getPath());
         if ($nodes === false) {
             return $collection;
         }
@@ -113,7 +113,7 @@ class Folder extends Node implements FolderInterface
             return false;
         }
 
-        return $this->filesystem->makeFolder($this->getPath());
+        return $this->getFilesystem()->makeFolder($this->getPath());
     }
 
     /**
@@ -127,7 +127,7 @@ class Folder extends Node implements FolderInterface
 
         $this->all()->__call('delete', []);
 
-        return $this->filesystem->deleteFolder($this->getPath());
+        return $this->getFilesystem()->deleteFolder($this->getPath());
     }
 
     /**
@@ -135,7 +135,7 @@ class Folder extends Node implements FolderInterface
      */
     public function copy(string $path): bool
     {
-        $folder = $this->filesystem->factoryFolder($path);
+        $folder = $this->getFilesystem()->factoryFolder($path);
         if (
             !$this->canRead()
             || !$folder->canWrite()
@@ -144,14 +144,11 @@ class Folder extends Node implements FolderInterface
             return false;
         }
         /**
-         * @var NodeInterface[]|false $lists
+         * @var NodeInterface $node
          */
-        $lists = $this->all();
-        if ($lists !== false) {
-            foreach ($lists as $node) {
-                if (!$node->copy($folder->getPath() . DIRECTORY_SEPARATOR . $node->getName())) {
-                    return false;
-                }
+        foreach ($this->all() as $node) {
+            if (!$node->copy($folder->getPath() . DIRECTORY_SEPARATOR . $node->getName())) {
+                return false;
             }
         }
 
