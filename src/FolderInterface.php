@@ -11,22 +11,16 @@ interface FolderInterface extends NodeInterface
 {
     /**
      * Возвращает коллекцию из дочерних элементов
-     *
-     * @return NodeCollectionInterface|false
      */
-    public function all();
+    public function all(): NodeCollectionInterface;
 
     /**
      * Возвращает коллекцию из дочерних файлов
-     *
-     * @return NodeCollectionInterface|false
      */
-    public function allFiles();
+    public function allFiles(): NodeCollectionInterface;
 
     /**
      * Возвращает коллекцию из дочерних папок
-     *
-     * @return NodeCollectionInterface|false
      */
-    public function allFolders();
+    public function allFolders(): NodeCollectionInterface;
 }
