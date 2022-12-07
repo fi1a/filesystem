@@ -14,7 +14,7 @@ class File extends Node implements FileInterface
      */
     public function getExtension()
     {
-        return $this->filesystem->getExtension($this->getPath());
+        return $this->getFilesystem()->getExtension($this->getPath());
     }
 
     /**
@@ -26,7 +26,7 @@ class File extends Node implements FileInterface
             return false;
         }
 
-        return $this->filesystem->readFile($this->getPath());
+        return $this->getFilesystem()->readFile($this->getPath());
     }
 
     /**
@@ -34,7 +34,7 @@ class File extends Node implements FileInterface
      */
     public function getBaseName(): string
     {
-        return $this->filesystem->getBaseName($this->getPath());
+        return $this->getFilesystem()->getBaseName($this->getPath());
     }
 
     /**
@@ -42,7 +42,7 @@ class File extends Node implements FileInterface
      */
     public function write(string $content)
     {
-        return $this->filesystem->write($this->getPath(), $content);
+        return $this->getFilesystem()->write($this->getPath(), $content);
     }
 
     /**
@@ -50,7 +50,7 @@ class File extends Node implements FileInterface
      */
     public function canExecute(): bool
     {
-        return $this->filesystem->canExecute($this->getPath());
+        return $this->getFilesystem()->canExecute($this->getPath());
     }
 
     /**
@@ -62,7 +62,7 @@ class File extends Node implements FileInterface
             return false;
         }
 
-        return $this->filesystem->getMTime($this->getPath());
+        return $this->getFilesystem()->getMTime($this->getPath());
     }
 
     /**
@@ -70,7 +70,7 @@ class File extends Node implements FileInterface
      */
     public function isExist(): bool
     {
-        return $this->filesystem->isFileExist($this->getPath());
+        return $this->getFilesystem()->isFileExist($this->getPath());
     }
 
     /**
@@ -98,7 +98,7 @@ class File extends Node implements FileInterface
             return false;
         }
 
-        return $this->filesystem->filesize($this->getPath());
+        return $this->getFilesystem()->filesize($this->getPath());
     }
 
     /**
@@ -122,7 +122,7 @@ class File extends Node implements FileInterface
             return false;
         }
 
-        return $this->filesystem->deleteFile($this->getPath());
+        return $this->getFilesystem()->deleteFile($this->getPath());
     }
 
     /**
@@ -130,6 +130,6 @@ class File extends Node implements FileInterface
      */
     public function copy(string $path): bool
     {
-        return $this->filesystem->copyFile($this->getPath(), $path);
+        return $this->getFilesystem()->copyFile($this->getPath(), $path);
     }
 }

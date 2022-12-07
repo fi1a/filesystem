@@ -435,4 +435,30 @@ class FolderTest extends FilesystemTestCase
         );
         $this->assertTrue($folder->delete());
     }
+
+    /**
+     * Возвращает дочернюю папку
+     */
+    public function testGetFolder(): void
+    {
+        $pathFolder = __DIR__ . '/Resources/folder';
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFolder($pathFolder);
+        $this->assertEquals('subfolder', $folder->getFolder('subfolder')->getName());
+        $this->assertEquals('subfolder', $folder->getFolder('/subfolder/')->getName());
+        $this->assertEquals('not-exists', $folder->getFolder('/not-exists/')->getName());
+    }
+
+    /**
+     * Возвращает дочерний файл
+     */
+    public function testGetFile(): void
+    {
+        $pathFolder = __DIR__ . '/Resources/folder';
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFolder($pathFolder);
+        $this->assertEquals('file.txt', $folder->getFile('file.txt')->getName());
+        $this->assertEquals('file.txt', $folder->getFile('/file.txt')->getName());
+        $this->assertEquals('not-exists.txt', $folder->getFile('/not-exists.txt')->getName());
+    }
 }

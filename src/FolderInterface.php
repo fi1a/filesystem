@@ -23,4 +23,14 @@ interface FolderInterface extends NodeInterface
      * Возвращает коллекцию из дочерних папок
      */
     public function allFolders(): NodeCollectionInterface;
+
+    /**
+     * Возвращает дочернюю папку
+     */
+    public function getFolder(string $path): FolderInterface;
+
+    /**
+     * Возвращает дочерний файл
+     */
+    public function getFile(string $path): FileInterface;
 }
