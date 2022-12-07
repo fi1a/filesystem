@@ -20,4 +20,19 @@ class LocalUtil
 
         return mb_substr($path, 0, 1) === '/';
     }
+
+    /**
+     * Возвращает путь до родительской папки
+     *
+     * @return string|false
+     */
+    public static function peekParentPath(string $path)
+    {
+        if (!$path) {
+            return false;
+        }
+        $info = pathinfo($path);
+
+        return $info['dirname'] && $info['dirname'] !== $path ? $info['dirname'] : false;
+    }
 }
