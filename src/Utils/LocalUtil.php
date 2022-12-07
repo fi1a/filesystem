@@ -43,4 +43,12 @@ class LocalUtil
     {
         return is_dir($path);
     }
+
+    /**
+     * Проверяет существование файла
+     */
+    public static function isFileExist(string $path): bool
+    {
+        return is_file($path);
+    }
 }
