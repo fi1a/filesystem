@@ -158,7 +158,7 @@ class Folder extends Node implements FolderInterface
     /**
      * @inheritDoc
      */
-    public function getChildFolder(string $path): FolderInterface
+    public function getFolder(string $path): FolderInterface
     {
         $path = trim($path, '\\/');
 
@@ -168,7 +168,7 @@ class Folder extends Node implements FolderInterface
     /**
      * @inheritDoc
      */
-    public function getChildFile(string $path): FileInterface
+    public function getFile(string $path): FileInterface
     {
         $path = ltrim($path, '\\/');
 
