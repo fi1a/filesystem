@@ -19,11 +19,22 @@ class FolderTest extends FilesystemTestCase
      */
     public function testGetPath(): void
     {
-        $folderPath = '/path/to/folder';
+        $folderPath = realpath(__DIR__ . '/Resources/folder');
         $filesystem = $this->getFilesystem();
         $folder = $filesystem->factoryFolder($folderPath);
         $this->assertEquals($folderPath, $folder->getPath());
         $this->assertEquals($folderPath, (string) $folder);
+    }
+
+    /**
+     * Возвращает путь
+     */
+    public function testGetRelativePath(): void
+    {
+        $folderPath = realpath(__DIR__ . '/Resources/folder');
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFolder('./folder');
+        $this->assertEquals($folderPath, $folder->getPath());
     }
 
     /**
@@ -34,6 +45,17 @@ class FolderTest extends FilesystemTestCase
         $this->expectException(InvalidArgumentException::class);
         $filesystem = $this->getFilesystem();
         $filesystem->factoryFolder('');
+    }
+
+    /**
+     * Возвращает путь
+     */
+    public function testGetPathRoot(): void
+    {
+        $folderPath = '.';
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFolder($folderPath);
+        $this->assertEquals(realpath(__DIR__ . '/Resources'), $folder->getPath());
     }
 
     /**

@@ -219,4 +219,12 @@ class Filesystem implements FilesystemInterface
     {
         return $this->adapter->rename($from, $to);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function normalizePath(string $path): string
+    {
+        return $this->adapter->normalizePath($path);
+    }
 }
