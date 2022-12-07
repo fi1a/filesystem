@@ -97,11 +97,12 @@ class LocalAdapter implements FilesystemAdapterInterface
     public function peekParentPath(string $path)
     {
         $path = $this->normalizePath($path);
-        $info = pathinfo($path);
+        $dirname = LocalUtil::peekParentPath($path);
+        if (!$dirname) {
+            return false;
+        }
 
-        return $info['dirname'] && $info['dirname'] !== $path && mb_strpos($info['dirname'], $this->directory) === 0
-            ? $info['dirname']
-            : false;
+        return mb_strpos($dirname, $this->directory) === 0 ? $dirname : false;
     }
 
     /**
@@ -141,7 +142,7 @@ class LocalAdapter implements FilesystemAdapterInterface
     {
         $path = $this->normalizePath($path);
 
-        return is_dir($path);
+        return LocalUtil::isFolderExist($path);
     }
 
     /**
@@ -151,7 +152,7 @@ class LocalAdapter implements FilesystemAdapterInterface
     {
         $path = $this->normalizePath($path);
 
-        return is_file($path);
+        return LocalUtil::isFileExist($path);
     }
 
     /**

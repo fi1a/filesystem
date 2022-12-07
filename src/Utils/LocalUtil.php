@@ -20,4 +20,35 @@ class LocalUtil
 
         return mb_substr($path, 0, 1) === '/';
     }
+
+    /**
+     * Возвращает путь до родительской папки
+     *
+     * @return string|false
+     */
+    public static function peekParentPath(string $path)
+    {
+        if (!$path) {
+            return false;
+        }
+        $info = pathinfo($path);
+
+        return $info['dirname'] && $info['dirname'] !== $path ? $info['dirname'] : false;
+    }
+
+    /**
+     * Проверяет существование папки
+     */
+    public static function isFolderExist(string $path): bool
+    {
+        return is_dir($path);
+    }
+
+    /**
+     * Проверяет существование файла
+     */
+    public static function isFileExist(string $path): bool
+    {
+        return is_file($path);
+    }
 }

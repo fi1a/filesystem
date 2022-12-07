@@ -46,40 +46,46 @@ class Folder extends Node implements FolderInterface
     /**
      * @inheritDoc
      */
-    public function all()
+    public function all(): NodeCollectionInterface
     {
+        $collection = new NodeCollection($this->filesystem, []);
         $nodes = $this->filesystem->all($this->getPath());
         if ($nodes === false) {
-            return false;
+            return $collection;
         }
+        $collection->exchangeArray($nodes);
 
-        return new NodeCollection($this->filesystem, $nodes);
+        return $collection;
     }
 
     /**
      * @inheritDoc
      */
-    public function allFiles()
+    public function allFiles(): NodeCollectionInterface
     {
+        $collection = new NodeCollection($this->filesystem, []);
         $nodes = $this->filesystem->allFiles($this->getPath());
         if ($nodes === false) {
-            return false;
+            return $collection;
         }
+        $collection->exchangeArray($nodes);
 
-        return new NodeCollection($this->filesystem, $nodes);
+        return $collection;
     }
 
     /**
      * @inheritDoc
      */
-    public function allFolders()
+    public function allFolders(): NodeCollectionInterface
     {
+        $collection = new NodeCollection($this->filesystem, []);
         $nodes = $this->filesystem->allFolders($this->getPath());
         if ($nodes === false) {
-            return false;
+            return $collection;
         }
+        $collection->exchangeArray($nodes);
 
-        return new NodeCollection($this->filesystem, $nodes);
+        return $collection;
     }
 
     /**
@@ -93,14 +99,7 @@ class Folder extends Node implements FolderInterface
         /**
          * @var int[] $sizes
          */
-        $sizes = [0];
-        $lists = $this->all();
-        if ($lists !== false) {
-            /**
-             * @var int[] $sizes
-             */
-            $sizes = $lists->getSize();
-        }
+        $sizes = $this->all()->getSize();
 
         return array_sum($sizes);
     }
@@ -125,10 +124,8 @@ class Folder extends Node implements FolderInterface
         if (!$this->isExist() || !$this->canWrite()) {
             return false;
         }
-        $lists = $this->all();
-        if ($lists !== false) {
-            $lists->__call('delete', []);
-        }
+
+        $this->all()->__call('delete', []);
 
         return $this->filesystem->deleteFolder($this->getPath());
     }

@@ -22,4 +22,15 @@ class LocalUtilTest extends TestCase
         $this->assertFalse(LocalUtil::isAbsolutePath('./../path/to/file.txt'));
         $this->assertFalse(LocalUtil::isAbsolutePath('.\..\path\to\file.txt'));
     }
+
+    /**
+     * Возвращает путь до родительской папки
+     */
+    public function testPeekParentPath(): void
+    {
+        $this->assertEquals('/path/to', LocalUtil::peekParentPath('/path/to/folder'));
+        $this->assertEquals('/path/to/folder', LocalUtil::peekParentPath('/path/to/folder/file.txt'));
+        $this->assertFalse(LocalUtil::peekParentPath('/'));
+        $this->assertFalse(LocalUtil::peekParentPath(''));
+    }
 }

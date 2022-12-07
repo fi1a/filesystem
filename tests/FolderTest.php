@@ -281,7 +281,7 @@ class FolderTest extends FilesystemTestCase
     {
         $filesystem = $this->getFilesystem();
         $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
-        $this->assertFalse($folder->all());
+        $this->assertCount(0, $folder->all());
     }
 
     /**
@@ -305,7 +305,7 @@ class FolderTest extends FilesystemTestCase
     {
         $filesystem = $this->getFilesystem();
         $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
-        $this->assertFalse($folder->allFiles());
+        $this->assertCount(0, $folder->allFiles());
     }
 
     /**
@@ -329,7 +329,7 @@ class FolderTest extends FilesystemTestCase
     {
         $filesystem = $this->getFilesystem();
         $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
-        $this->assertFalse($folder->allFolders());
+        $this->assertCount(0, $folder->allFolders());
     }
 
     /**
