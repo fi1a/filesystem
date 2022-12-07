@@ -446,5 +446,19 @@ class FolderTest extends FilesystemTestCase
         $folder = $filesystem->factoryFolder($pathFolder);
         $this->assertEquals('subfolder', $folder->getChildFolder('subfolder')->getName());
         $this->assertEquals('subfolder', $folder->getChildFolder('/subfolder/')->getName());
+        $this->assertEquals('not-exists', $folder->getChildFolder('/not-exists/')->getName());
+    }
+
+    /**
+     * Возвращает дочерний файл
+     */
+    public function testGetChildFile(): void
+    {
+        $pathFolder = __DIR__ . '/Resources/folder';
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFolder($pathFolder);
+        $this->assertEquals('file.txt', $folder->getChildFile('file.txt')->getName());
+        $this->assertEquals('file.txt', $folder->getChildFile('/file.txt')->getName());
+        $this->assertEquals('not-exists.txt', $folder->getChildFile('/not-exists.txt')->getName());
     }
 }

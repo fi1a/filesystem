@@ -164,4 +164,14 @@ class Folder extends Node implements FolderInterface
 
         return $this->getFilesystem()->factoryFolder($this->getPath() . DIRECTORY_SEPARATOR . $path);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getChildFile(string $path): FileInterface
+    {
+        $path = ltrim($path, '\\/');
+
+        return $this->getFilesystem()->factoryFile($this->getPath() . DIRECTORY_SEPARATOR . $path);
+    }
 }
