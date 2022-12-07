@@ -45,7 +45,7 @@ class LocalAdapter implements FilesystemAdapterInterface
     public function __construct(string $directory, int $rights = 0775)
     {
         if (!$directory) {
-            throw new InvalidArgumentException(sprintf('Путь не может быть пустой'));
+            throw new InvalidArgumentException(sprintf('Путь не может быть пустым'));
         }
         $this->directory = realpath($directory);
         if (!$this->directory) {
