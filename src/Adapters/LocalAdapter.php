@@ -337,6 +337,17 @@ class LocalAdapter implements FilesystemAdapterInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function rename(string $from, string $to): bool
+    {
+        $from = $this->normalizePath($from);
+        $to = $this->normalizePath($to);
+
+        return @rename($from, $to);
+    }
+
+    /**
      * Возвращает дочерние элементы
      *
      * @return string[]

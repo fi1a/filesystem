@@ -211,4 +211,12 @@ class Filesystem implements FilesystemInterface
     {
         return $this->adapter->getMTime($path);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function rename(string $from, string $to): bool
+    {
+        return $this->adapter->rename($from, $to);
+    }
 }

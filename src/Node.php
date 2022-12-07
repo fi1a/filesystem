@@ -114,7 +114,7 @@ abstract class Node implements NodeInterface
             return false;
         }
         $node = $this->getFilesystem()->factory($parent->getPath() . DIRECTORY_SEPARATOR . $newName);
-        $result = @rename($this->getPath(), $node->getPath());
+        $result = $this->getFilesystem()->rename($this->getPath(), $node->getPath());
         if ($result) {
             $this->setPath($node->getPath());
         }
@@ -138,7 +138,7 @@ abstract class Node implements NodeInterface
         if (!$parent->isExist()) {
             $parent->make();
         }
-        $result = @rename($this->getPath(), $node->getPath());
+        $result = $this->getFilesystem()->rename($this->getPath(), $node->getPath());
         if ($result) {
             $this->setPath($node->getPath());
         }

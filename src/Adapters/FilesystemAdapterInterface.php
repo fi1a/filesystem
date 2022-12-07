@@ -136,4 +136,9 @@ interface FilesystemAdapterInterface
      * @return int|false
      */
     public function getMTime(string $path);
+
+    /**
+     * Переименование
+     */
+    public function rename(string $from, string $to): bool;
 }
