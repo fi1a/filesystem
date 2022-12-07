@@ -141,4 +141,9 @@ interface FilesystemAdapterInterface
      * Переименование
      */
     public function rename(string $from, string $to): bool;
+
+    /**
+     * Возвращает путь
+     */
+    public function normalizePath(string $path): string;
 }

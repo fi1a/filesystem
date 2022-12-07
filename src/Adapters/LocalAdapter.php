@@ -348,6 +348,26 @@ class LocalAdapter implements FilesystemAdapterInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function normalizePath(string $path): string
+    {
+        if (!LocalUtil::isAbsolutePath($path)) {
+            $path = $this->directory . DIRECTORY_SEPARATOR . $path;
+        }
+
+        $path = is_file($path) || is_dir($path) || is_link($path) ? realpath($path) : $path;
+
+        if (mb_strpos($path, $this->directory) !== 0) {
+            throw new OutOfBoundsException(
+                sprintf('Путь "%s" выходит за рамки определенного в адаптере.', $path)
+            );
+        }
+
+        return $path;
+    }
+
+    /**
      * Возвращает дочерние элементы
      *
      * @return string[]
@@ -377,25 +397,5 @@ class LocalAdapter implements FilesystemAdapterInterface
         }
 
         return $nodes;
-    }
-
-    /**
-     * Возвращает путь
-     */
-    private function normalizePath(string $path): string
-    {
-        if (!LocalUtil::isAbsolutePath($path)) {
-            $path = $this->directory . DIRECTORY_SEPARATOR . $path;
-        }
-
-        $path = is_file($path) || is_dir($path) || is_link($path) ? realpath($path) : $path;
-
-        if (mb_strpos($path, $this->directory) !== 0) {
-            throw new OutOfBoundsException(
-                sprintf('Путь "%s" выходит за рамки определенного в адаптере.', $path)
-            );
-        }
-
-        return $path;
     }
 }

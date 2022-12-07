@@ -28,8 +28,8 @@ abstract class Node implements NodeInterface
      */
     public function __construct(string $path, FilesystemInterface $filesystem)
     {
-        $this->setPath($path);
         $this->filesystem = $filesystem;
+        $this->setPath($path);
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class Node implements NodeInterface
         if ($path !== DIRECTORY_SEPARATOR) {
             $path = rtrim($path, DIRECTORY_SEPARATOR);
         }
-        $this->path = $path;
+        $this->path = $this->getFilesystem()->normalizePath($path);
     }
 
     /**
