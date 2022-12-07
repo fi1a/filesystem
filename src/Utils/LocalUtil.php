@@ -35,4 +35,12 @@ class LocalUtil
 
         return $info['dirname'] && $info['dirname'] !== $path ? $info['dirname'] : false;
     }
+
+    /**
+     * Проверяет существование папки
+     */
+    public static function isFolderExist(string $path): bool
+    {
+        return is_dir($path);
+    }
 }

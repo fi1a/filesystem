@@ -142,7 +142,7 @@ class LocalAdapter implements FilesystemAdapterInterface
     {
         $path = $this->normalizePath($path);
 
-        return is_dir($path);
+        return LocalUtil::isFolderExist($path);
     }
 
     /**

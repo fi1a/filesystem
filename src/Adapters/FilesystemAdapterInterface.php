@@ -47,7 +47,7 @@ interface FilesystemAdapterInterface
     public function canExecute(string $path): bool;
 
     /**
-     * Проверяет существование
+     * Проверяет существование папки
      */
     public function isFolderExist(string $path): bool;
 
