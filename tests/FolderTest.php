@@ -435,4 +435,16 @@ class FolderTest extends FilesystemTestCase
         );
         $this->assertTrue($folder->delete());
     }
+
+    /**
+     * Возвращает дочернюю папку
+     */
+    public function testGetChildFolder(): void
+    {
+        $pathFolder = __DIR__ . '/Resources/folder';
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFolder($pathFolder);
+        $this->assertEquals('subfolder', $folder->getChildFolder('subfolder')->getName());
+        $this->assertEquals('subfolder', $folder->getChildFolder('/subfolder/')->getName());
+    }
 }
