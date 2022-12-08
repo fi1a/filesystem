@@ -100,6 +100,18 @@ class FolderTest extends FilesystemTestCase
     }
 
     /**
+     * Возвращает класс родительской папки
+     */
+    public function testParentRelative(): void
+    {
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFolder('./folder');
+        $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
+        $folder = $filesystem->factoryFolder('./not-exists');
+        $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
+    }
+
+    /**
      * Возвращает класс родительской папки (ограничение в адаптере)
      */
     public function testParentDirectoryRestriction(): void

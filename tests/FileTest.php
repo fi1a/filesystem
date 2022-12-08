@@ -229,4 +229,25 @@ class FileTest extends FilesystemTestCase
         $this->assertTrue($file->isExist());
         $this->assertTrue($copyFile->delete());
     }
+
+    /**
+     * Возвращает класс родительской папки
+     */
+    public function testParent(): void
+    {
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFile(__DIR__ . '/Resources/file.txt');
+        $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
+        $this->assertFalse($folder->getParent()->getParent());
+    }
+
+    /**
+     * Возвращает класс родительской папки
+     */
+    public function testParentRelative(): void
+    {
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFile('./not-exists.txt');
+        $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
+    }
 }
