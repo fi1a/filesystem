@@ -51,4 +51,34 @@ class LocalUtil
     {
         return is_file($path);
     }
+
+    /**
+     * Возвращает нормализованный путь
+     */
+    public static function normalizePath(string $path): string
+    {
+        $tokens = [];
+        $path = str_replace('\\', '/', $path);
+        preg_match('#^(?P<root>([a-zA-Z]+:)?//?)#', $path, $matches);
+        $root = !isset($matches['root']) || !$matches['root'] ? '' : $matches['root'];
+        $path = mb_substr($path, strlen($root));
+        $parts = explode('/', $path);
+
+        foreach ($parts as $part) {
+            if (!$part) {
+                continue;
+            }
+            if ($part === '.' || $part === '..') {
+                if ($part === '..' && count($tokens) !== 0) {
+                    array_pop($tokens);
+                }
+
+                continue;
+            }
+
+            $tokens[] = $part;
+        }
+
+        return $root . implode('/', $tokens);
+    }
 }

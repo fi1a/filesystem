@@ -38,7 +38,7 @@ class LocalAdapterTest extends FilesystemTestCase
     public function testConstructException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->getAdapter('/not/exists/');
+        $this->getAdapter('..');
     }
 
     /**
