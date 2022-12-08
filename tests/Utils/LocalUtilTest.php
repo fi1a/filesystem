@@ -33,4 +33,21 @@ class LocalUtilTest extends TestCase
         $this->assertFalse(LocalUtil::peekParentPath('/'));
         $this->assertFalse(LocalUtil::peekParentPath(''));
     }
+
+    /**
+     * Возвращает нормализованный путь
+     */
+    public function testNormalizePath(): void
+    {
+        $this->assertEquals('/path/to/folder', LocalUtil::normalizePath('/path/to/folder'));
+        $this->assertEquals('/path/to', LocalUtil::normalizePath('/path/to/folder/..'));
+        $this->assertEquals('path/to', LocalUtil::normalizePath('path/to/folder/..'));
+        $this->assertEquals('path/to', LocalUtil::normalizePath('./path/to/folder/..'));
+        $this->assertEquals('C:/path/to/folder', LocalUtil::normalizePath('C:\path\to\folder'));
+        $this->assertEquals('C:/path', LocalUtil::normalizePath('C:\path\to\folder\..\..'));
+        $this->assertEquals('C:/', LocalUtil::normalizePath('C:\\'));
+        $this->assertEquals('/', LocalUtil::normalizePath('/'));
+        $this->assertEquals('', LocalUtil::normalizePath('.'));
+        $this->assertEquals('', LocalUtil::normalizePath('..'));
+    }
 }

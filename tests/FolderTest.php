@@ -59,6 +59,16 @@ class FolderTest extends FilesystemTestCase
     }
 
     /**
+     * Возвращает путь
+     */
+    public function testGetPathNotExists(): void
+    {
+        $filesystem = $this->getFilesystem('/not/exists');
+        $folder = $filesystem->factoryFolder('./folder/subfolder/..');
+        $this->assertEquals('/not/exists/folder', $folder->getPath());
+    }
+
+    /**
      * Возвращает имя
      */
     public function testGetName(): void
@@ -97,6 +107,18 @@ class FolderTest extends FilesystemTestCase
         $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
         $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
         $this->assertFalse($folder->getParent()->getParent());
+    }
+
+    /**
+     * Возвращает класс родительской папки
+     */
+    public function testParentRelative(): void
+    {
+        $filesystem = $this->getFilesystem();
+        $folder = $filesystem->factoryFolder('./folder');
+        $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
+        $folder = $filesystem->factoryFolder('./not-exists');
+        $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
     }
 
     /**

@@ -47,12 +47,9 @@ class LocalAdapter implements FilesystemAdapterInterface
         if (!$directory) {
             throw new InvalidArgumentException(sprintf('Путь не может быть пустым'));
         }
-        $this->directory = realpath($directory);
+        $this->directory = LocalUtil::normalizePath($directory);
         if (!$this->directory) {
             throw new InvalidArgumentException(sprintf('Путь "%s" не существует', $directory));
-        }
-        if ($this->directory !== '/') {
-            $this->directory = rtrim($this->directory, '/\\');
         }
 
         $this->rights = $rights;
@@ -356,7 +353,7 @@ class LocalAdapter implements FilesystemAdapterInterface
             $path = $this->directory . DIRECTORY_SEPARATOR . $path;
         }
 
-        $path = is_file($path) || is_dir($path) || is_link($path) ? realpath($path) : $path;
+        $path = LocalUtil::normalizePath($path);
 
         if (mb_strpos($path, $this->directory) !== 0) {
             throw new OutOfBoundsException(
