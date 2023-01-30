@@ -179,7 +179,7 @@ class LocalAdapter implements FilesystemAdapterInterface
             return false;
         }
 
-        return mkdir($path, $this->rights, true);
+        return @mkdir($path, $this->rights, true);
     }
 
     /**
