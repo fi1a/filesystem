@@ -109,7 +109,7 @@ class Folder extends Node implements FolderInterface
      */
     public function make(): bool
     {
-        if ($this->isExist() || !$this->canWrite()) {
+        if ($this->isExist()) {
             return false;
         }
 

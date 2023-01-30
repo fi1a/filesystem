@@ -209,6 +209,7 @@ class FolderTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
         $folder = $filesystem->factoryFolder($pathFolder);
         $this->assertTrue($folder->make());
+        $this->assertFalse($folder->make());
         chmod($pathFolder, 0000);
         $folder = $filesystem->factoryFolder($pathFolder . '/fail');
         $this->assertFalse($folder->make());
