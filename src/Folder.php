@@ -135,7 +135,7 @@ class Folder extends Node implements FolderInterface
      */
     public function copy(string $path): bool
     {
-        $folder = $this->getFilesystem()->factoryFolder($path);
+        $folder = $this->getFilesystem()->folder($path);
         if (
             !$this->canRead()
             || !$folder->canWrite()
@@ -162,7 +162,7 @@ class Folder extends Node implements FolderInterface
     {
         $path = trim($path, '\\/');
 
-        return $this->getFilesystem()->factoryFolder($this->getPath() . DIRECTORY_SEPARATOR . $path);
+        return $this->getFilesystem()->folder($this->getPath() . DIRECTORY_SEPARATOR . $path);
     }
 
     /**
@@ -172,6 +172,6 @@ class Folder extends Node implements FolderInterface
     {
         $path = ltrim($path, '\\/');
 
-        return $this->getFilesystem()->factoryFile($this->getPath() . DIRECTORY_SEPARATOR . $path);
+        return $this->getFilesystem()->file($this->getPath() . DIRECTORY_SEPARATOR . $path);
     }
 }

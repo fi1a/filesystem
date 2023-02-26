@@ -21,7 +21,7 @@ class FolderTest extends FilesystemTestCase
     {
         $folderPath = realpath(__DIR__ . '/Resources/folder');
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($folderPath);
+        $folder = $filesystem->folder($folderPath);
         $this->assertEquals($folderPath, $folder->getPath());
         $this->assertEquals($folderPath, (string) $folder);
     }
@@ -33,7 +33,7 @@ class FolderTest extends FilesystemTestCase
     {
         $folderPath = realpath(__DIR__ . '/Resources/folder');
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder('./folder');
+        $folder = $filesystem->folder('./folder');
         $this->assertEquals($folderPath, $folder->getPath());
     }
 
@@ -44,7 +44,7 @@ class FolderTest extends FilesystemTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $filesystem = $this->getFilesystem();
-        $filesystem->factoryFolder('');
+        $filesystem->folder('');
     }
 
     /**
@@ -54,7 +54,7 @@ class FolderTest extends FilesystemTestCase
     {
         $folderPath = '.';
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($folderPath);
+        $folder = $filesystem->folder($folderPath);
         $this->assertEquals(realpath(__DIR__ . '/Resources'), $folder->getPath());
     }
 
@@ -64,7 +64,7 @@ class FolderTest extends FilesystemTestCase
     public function testGetPathNotExists(): void
     {
         $filesystem = $this->getFilesystem('/not/exists');
-        $folder = $filesystem->factoryFolder('./folder/subfolder/..');
+        $folder = $filesystem->folder('./folder/subfolder/..');
         $this->assertEquals('/not/exists/folder', $folder->getPath());
     }
 
@@ -74,7 +74,7 @@ class FolderTest extends FilesystemTestCase
     public function testGetName(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder('./not-exists');
+        $folder = $filesystem->folder('./not-exists');
         $this->assertEquals('not-exists', $folder->getName());
     }
 
@@ -84,7 +84,7 @@ class FolderTest extends FilesystemTestCase
     public function testPeekParentPath(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/not-exists');
         $this->assertEquals(__DIR__ . '/Resources', $folder->peekParentPath());
     }
 
@@ -94,7 +94,7 @@ class FolderTest extends FilesystemTestCase
     public function testPeekParentPathRoot(): void
     {
         $filesystem = $this->getFilesystem('/');
-        $folder = $filesystem->factoryFolder('/');
+        $folder = $filesystem->folder('/');
         $this->assertFalse($folder->peekParentPath());
     }
 
@@ -104,7 +104,7 @@ class FolderTest extends FilesystemTestCase
     public function testParent(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/not-exists');
         $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
         $this->assertFalse($folder->getParent()->getParent());
     }
@@ -115,9 +115,9 @@ class FolderTest extends FilesystemTestCase
     public function testParentRelative(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder('./folder');
+        $folder = $filesystem->folder('./folder');
         $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
-        $folder = $filesystem->factoryFolder('./not-exists');
+        $folder = $filesystem->folder('./not-exists');
         $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
     }
 
@@ -127,7 +127,7 @@ class FolderTest extends FilesystemTestCase
     public function testParentDirectoryRestriction(): void
     {
         $filesystem = $this->getFilesystem(__DIR__ . '/Resources');
-        $folder = $filesystem->factoryFolder('./folder');
+        $folder = $filesystem->folder('./folder');
         $this->assertInstanceOf(FolderInterface::class, $folder->getParent());
         $this->assertFalse($folder->getParent()->getParent());
     }
@@ -138,7 +138,7 @@ class FolderTest extends FilesystemTestCase
     public function testParentRoot(): void
     {
         $filesystem = $this->getFilesystem('/');
-        $folder = $filesystem->factoryFolder('/');
+        $folder = $filesystem->folder('/');
         $this->assertFalse($folder->getParent());
     }
 
@@ -148,7 +148,7 @@ class FolderTest extends FilesystemTestCase
     public function testCanRead(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertTrue($folder->canRead());
     }
 
@@ -158,11 +158,11 @@ class FolderTest extends FilesystemTestCase
     public function testCanWrite(): void
     {
         $filesystem = $this->getFilesystem('/');
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertTrue($folder->canWrite());
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder/not-exists');
         $this->assertTrue($folder->canWrite());
-        $folder = $filesystem->factoryFolder('/not-exists');
+        $folder = $filesystem->folder('/not-exists');
         $this->assertFalse($folder->canWrite());
     }
 
@@ -172,9 +172,9 @@ class FolderTest extends FilesystemTestCase
     public function testIsExists(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertTrue($folder->isExist());
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder/not-exists');
         $this->assertFalse($folder->isExist());
     }
 
@@ -184,7 +184,7 @@ class FolderTest extends FilesystemTestCase
     public function testRename(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertTrue($folder->rename('new-name'));
         $this->assertEquals('new-name', $folder->getName());
         $this->assertTrue($folder->rename('folder'));
@@ -196,7 +196,7 @@ class FolderTest extends FilesystemTestCase
     public function testRenameRoot(): void
     {
         $filesystem = $this->getFilesystem('/');
-        $folder = $filesystem->factoryFolder('/');
+        $folder = $filesystem->folder('/');
         $this->assertFalse($folder->rename('new-name'));
     }
 
@@ -207,11 +207,11 @@ class FolderTest extends FilesystemTestCase
     {
         $pathFolder = __DIR__ . '/Resources/folder/new-folder';
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($pathFolder);
+        $folder = $filesystem->folder($pathFolder);
         $this->assertTrue($folder->make());
         $this->assertFalse($folder->make());
         chmod($pathFolder, 0000);
-        $folder = $filesystem->factoryFolder($pathFolder . '/fail');
+        $folder = $filesystem->folder($pathFolder . '/fail');
         $this->assertFalse($folder->make());
         chmod($pathFolder, 0775);
         rmdir($pathFolder);
@@ -225,7 +225,7 @@ class FolderTest extends FilesystemTestCase
     public function testMove(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder/new-folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder/new-folder');
         $this->assertTrue($folder->make());
         $pathFolder = __DIR__ . '/Resources/folder/move-folder';
         $this->assertTrue($folder->move($pathFolder));
@@ -242,7 +242,7 @@ class FolderTest extends FilesystemTestCase
     public function testMoveRoot(): void
     {
         $filesystem = $this->getFilesystem('/');
-        $folder = $filesystem->factoryFolder('/');
+        $folder = $filesystem->folder('/');
         $this->assertFalse($folder->move('/move-folder-fail'));
     }
 
@@ -252,7 +252,7 @@ class FolderTest extends FilesystemTestCase
     public function testMoveNotExists(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder/not-exists');
         $this->assertFalse($folder->move(__DIR__ . '/Resources/folder/move-folder-fail'));
     }
 
@@ -262,9 +262,9 @@ class FolderTest extends FilesystemTestCase
     public function testMoveParentNotExists(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertTrue($folder->move(__DIR__ . '/Resources/new/move-folder'));
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/new/move-folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/new/move-folder');
         $this->assertTrue($folder->move(__DIR__ . '/Resources/folder'));
         rmdir(__DIR__ . '/Resources/new');
     }
@@ -275,7 +275,7 @@ class FolderTest extends FilesystemTestCase
     public function testMoveExists(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertFalse($folder->move(__DIR__ . '/Resources/folder/.gitkeep'));
     }
 
@@ -285,7 +285,7 @@ class FolderTest extends FilesystemTestCase
     public function testIsFile(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertFalse($folder->isFile());
     }
 
@@ -295,7 +295,7 @@ class FolderTest extends FilesystemTestCase
     public function testIsFolder(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertTrue($folder->isFolder());
     }
 
@@ -305,7 +305,7 @@ class FolderTest extends FilesystemTestCase
     public function testIsLink(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertFalse($folder->isLink());
     }
 
@@ -315,7 +315,7 @@ class FolderTest extends FilesystemTestCase
     public function testAll(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertCount(3, $folder->all());
     }
 
@@ -325,7 +325,7 @@ class FolderTest extends FilesystemTestCase
     public function testAllNotExists(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/not-exists');
         $this->assertCount(0, $folder->all());
     }
 
@@ -335,7 +335,7 @@ class FolderTest extends FilesystemTestCase
     public function testAllFiles(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $files = $folder->allFiles();
         $this->assertCount(2, $files);
         foreach ($files as $item) {
@@ -349,7 +349,7 @@ class FolderTest extends FilesystemTestCase
     public function testAllFilesNotExists(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/not-exists');
         $this->assertCount(0, $folder->allFiles());
     }
 
@@ -359,7 +359,7 @@ class FolderTest extends FilesystemTestCase
     public function testAllFolders(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $folders = $folder->allFolders();
         $this->assertCount(1, $folders);
         foreach ($folders as $item) {
@@ -373,7 +373,7 @@ class FolderTest extends FilesystemTestCase
     public function testAllFoldersNotExists(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/not-exists');
         $this->assertCount(0, $folder->allFolders());
     }
 
@@ -383,7 +383,7 @@ class FolderTest extends FilesystemTestCase
     public function testGetSize(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder');
         $this->assertEquals(4, $folder->getSize());
     }
 
@@ -393,7 +393,7 @@ class FolderTest extends FilesystemTestCase
     public function testGetSizeNotExists(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/not-exists');
         $this->assertFalse($folder->getSize());
     }
 
@@ -406,9 +406,9 @@ class FolderTest extends FilesystemTestCase
     {
         $pathFolder = __DIR__ . '/Resources/folder/new-folder';
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($pathFolder);
+        $folder = $filesystem->folder($pathFolder);
         $this->assertTrue($folder->make());
-        $file = $filesystem->factoryFile($pathFolder . '/file.txt');
+        $file = $filesystem->file($pathFolder . '/file.txt');
         $this->assertTrue($file->make());
         $this->assertTrue($folder->delete());
     }
@@ -422,7 +422,7 @@ class FolderTest extends FilesystemTestCase
     {
         $pathFolder = __DIR__ . '/Resources/folder/new-folder';
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($pathFolder);
+        $folder = $filesystem->folder($pathFolder);
         $this->assertFalse($folder->delete());
     }
 
@@ -435,13 +435,13 @@ class FolderTest extends FilesystemTestCase
     {
         $pathFolder = __DIR__ . '/Resources/folder/new-folder';
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($pathFolder);
+        $folder = $filesystem->folder($pathFolder);
         $this->assertTrue($folder->make());
-        $file = $filesystem->factoryFile($pathFolder . '/file.txt');
+        $file = $filesystem->file($pathFolder . '/file.txt');
         $this->assertTrue($file->make());
         $pathCopyFolder = __DIR__ . '/Resources/folder/copy-folder';
         $this->assertTrue($folder->copy($pathCopyFolder));
-        $copyFolder = $filesystem->factoryFolder($pathCopyFolder);
+        $copyFolder = $filesystem->folder($pathCopyFolder);
         $this->assertTrue($copyFolder->isExist());
         $this->assertTrue($copyFolder->delete());
         $this->assertTrue($folder->delete());
@@ -455,7 +455,7 @@ class FolderTest extends FilesystemTestCase
     public function testCopyFail(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder(__DIR__ . '/Resources/folder/not-exists');
+        $folder = $filesystem->folder(__DIR__ . '/Resources/folder/not-exists');
         $this->assertFalse($folder->copy(__DIR__ . '/Resources/folder/move-folder-fail'));
     }
 
@@ -468,15 +468,15 @@ class FolderTest extends FilesystemTestCase
     {
         $pathFolder = __DIR__ . '/Resources/folder/new-folder';
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($pathFolder);
+        $folder = $filesystem->folder($pathFolder);
         $this->assertTrue($folder->make());
-        $file = $filesystem->factoryFile($pathFolder . '/file.txt');
+        $file = $filesystem->file($pathFolder . '/file.txt');
         $this->assertTrue($file->make());
         chmod($file->getPath(), 0000);
         $this->assertFalse($folder->copy(__DIR__ . '/Resources/folder/move-folder-fail'));
         chmod($file->getPath(), 0775);
         $this->assertTrue(
-            $filesystem->factoryFolder(__DIR__ . '/Resources/folder/move-folder-fail')->delete()
+            $filesystem->folder(__DIR__ . '/Resources/folder/move-folder-fail')->delete()
         );
         $this->assertTrue($folder->delete());
     }
@@ -488,7 +488,7 @@ class FolderTest extends FilesystemTestCase
     {
         $pathFolder = __DIR__ . '/Resources/folder';
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($pathFolder);
+        $folder = $filesystem->folder($pathFolder);
         $this->assertEquals('subfolder', $folder->getFolder('subfolder')->getName());
         $this->assertEquals('subfolder', $folder->getFolder('/subfolder/')->getName());
         $this->assertEquals('not-exists', $folder->getFolder('/not-exists/')->getName());
@@ -501,7 +501,7 @@ class FolderTest extends FilesystemTestCase
     {
         $pathFolder = __DIR__ . '/Resources/folder';
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFolder($pathFolder);
+        $folder = $filesystem->folder($pathFolder);
         $this->assertEquals('file.txt', $folder->getFile('file.txt')->getName());
         $this->assertEquals('file.txt', $folder->getFile('/file.txt')->getName());
         $this->assertEquals('not-exists.txt', $folder->getFile('/not-exists.txt')->getName());
