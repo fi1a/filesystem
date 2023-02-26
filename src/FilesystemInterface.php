@@ -24,12 +24,12 @@ interface FilesystemInterface
     /**
      * Фабричный метод файла
      */
-    public function factoryFile(string $path): FileInterface;
+    public function file(string $path): FileInterface;
 
     /**
      * Фабричный метод папки
      */
-    public function factoryFolder(string $path): FolderInterface;
+    public function folder(string $path): FolderInterface;
 
     /**
      * Возвращает название

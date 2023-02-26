@@ -30,24 +30,40 @@ class Filesystem implements FilesystemInterface
     public function factory(string $path): NodeInterface
     {
         if ($this->adapter->isFolder($path)) {
-            return $this->factoryFolder($path);
+            return $this->folder($path);
         }
 
-        return $this->factoryFile($path);
+        return $this->file($path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public function factoryFile(string $path): FileInterface
+    {
+        return $this->file($path);
     }
 
     /**
      * @inheritDoc
      */
-    public function factoryFile(string $path): FileInterface
+    public function file(string $path): FileInterface
     {
         return new File($path, $this);
     }
 
     /**
-     * @inheritDoc
+     * @deprecated
      */
     public function factoryFolder(string $path): FolderInterface
+    {
+        return $this->folder($path);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function folder(string $path): FolderInterface
     {
         return new Folder($path, $this);
     }

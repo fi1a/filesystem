@@ -27,7 +27,7 @@ class NodeCollectionTest extends FilesystemTestCase
         $collection[] = './folder/file.txt';
         $this->assertCount(2, $collection);
         $this->assertInstanceOf(FileInterface::class, $collection[1]);
-        $collection[] = $filesystem->factoryFile('./folder/file.txt');
+        $collection[] = $filesystem->file('./folder/file.txt');
         $this->assertCount(3, $collection);
         $this->assertInstanceOf(FileInterface::class, $collection[2]);
     }

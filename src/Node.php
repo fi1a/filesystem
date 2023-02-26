@@ -72,7 +72,7 @@ abstract class Node implements NodeInterface
             return false;
         }
 
-        return $this->getFilesystem()->factoryFolder($path);
+        return $this->getFilesystem()->folder($path);
     }
 
     /**
