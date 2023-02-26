@@ -38,13 +38,13 @@ use Fi1a\Filesystem\Filesystem;
 $adapter = new LocalAdapter(__DIR__ . '/Resources');
 $filesystem = new Filesystem($adapter);
 
-$folder = $filesystem->factoryFolder('./folder'); // Fi1a\Filesystem\FolderInterface
+$folder = $filesystem->folder('./folder'); // Fi1a\Filesystem\FolderInterface
 $folder->make();
 
 $folder = $filesystem->factory('./folder'); // Fi1a\Filesystem\FolderInterface
 $folder->isExist(); // true
 
-$file = $filesystem->factoryFile($folder->getPath() . '/file.txt'); // Fi1a\Filesystem\FileInterface
+$file = $filesystem->file($folder->getPath() . '/file.txt'); // Fi1a\Filesystem\FileInterface
 $file->make();
 
 $file = $filesystem->factory('/folder/file.txt'); // Fi1a\Filesystem\FileInterface
@@ -90,7 +90,7 @@ use Fi1a\Filesystem\Filesystem;
 $adapter = new LocalAdapter(__DIR__ . '/Resources');
 $filesystem = new Filesystem($adapter);
 
-$folder = $filesystem->factoryFolder('./folder'); // Fi1a\Filesystem\FolderInterface
+$folder = $filesystem->folder('./folder'); // Fi1a\Filesystem\FolderInterface
 if (!$folder->isExist()) {
     $folder->make(); // true
 }
@@ -136,7 +136,7 @@ use Fi1a\Filesystem\Filesystem;
 $adapter = new LocalAdapter(__DIR__ . '/Resources');
 $filesystem = new Filesystem($adapter);
 
-$file = $filesystem->factoryFile('./folder/file.txt'); // Fi1a\Filesystem\FileInterface
+$file = $filesystem->file('./folder/file.txt'); // Fi1a\Filesystem\FileInterface
 $file->write('file content'); // 12
 ```
 

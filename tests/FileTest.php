@@ -19,11 +19,11 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertEquals('txt', $file->getExtension());
 
         $filePath = __DIR__ . '/Resources/folder/file';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertNull($file->getExtension());
     }
 
@@ -35,11 +35,11 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertEquals('file', $file->getBaseName());
 
         $filePath = __DIR__ . '/Resources/folder/.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertEquals('', $file->getBaseName());
     }
 
@@ -51,7 +51,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertEquals('1234', $file->read());
     }
 
@@ -63,7 +63,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/not-exists.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertFalse($file->read());
     }
 
@@ -77,7 +77,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/write.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertIsInt($file->write('1234'));
         $this->assertEquals('1234', $file->read());
     }
@@ -90,7 +90,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         chmod($filePath, 0777);
         $this->assertTrue($file->canExecute());
         chmod($filePath, 0644);
@@ -105,7 +105,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertIsNumeric($file->getMTime());
     }
 
@@ -117,7 +117,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/not-exists.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertFalse($file->getMTime());
     }
 
@@ -129,7 +129,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertTrue($file->isFile());
     }
 
@@ -141,7 +141,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertFalse($file->isFolder());
     }
 
@@ -153,7 +153,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertEquals(4, $file->getSize());
     }
 
@@ -165,7 +165,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/not-exists.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertFalse($file->getSize());
     }
 
@@ -177,7 +177,7 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/new-file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertFalse($file->isExist());
         $this->assertTrue($file->make());
         $this->assertTrue($file->isExist());
@@ -195,14 +195,14 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/write.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertTrue($file->isExist());
         $this->assertTrue($file->delete());
         $this->assertFalse($file->isExist());
         $this->assertFalse($file->delete());
 
         $filePath = __DIR__ . '/Resources/folder/new-file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $this->assertTrue($file->isExist());
         $this->assertTrue($file->delete());
         $this->assertFalse($file->isExist());
@@ -219,9 +219,9 @@ class FileTest extends FilesystemTestCase
         $filesystem = $this->getFilesystem();
 
         $filePath = __DIR__ . '/Resources/folder/file.txt';
-        $file = $filesystem->factoryFile($filePath);
+        $file = $filesystem->file($filePath);
         $copyFilePath = __DIR__ . '/Resources/folder/copy-file.txt';
-        $copyFile = $filesystem->factoryFile($copyFilePath);
+        $copyFile = $filesystem->file($copyFilePath);
         $this->assertTrue($file->isExist());
         $this->assertFalse($copyFile->isExist());
         $this->assertTrue($file->copy($copyFile->getPath()));
@@ -236,7 +236,7 @@ class FileTest extends FilesystemTestCase
     public function testParent(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFile(__DIR__ . '/Resources/file.txt');
+        $folder = $filesystem->file(__DIR__ . '/Resources/file.txt');
         $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
         $this->assertFalse($folder->getParent()->getParent());
     }
@@ -247,7 +247,7 @@ class FileTest extends FilesystemTestCase
     public function testParentRelative(): void
     {
         $filesystem = $this->getFilesystem();
-        $folder = $filesystem->factoryFile('./not-exists.txt');
+        $folder = $filesystem->file('./not-exists.txt');
         $this->assertEquals(__DIR__ . '/Resources', $folder->getParent()->getPath());
     }
 }
